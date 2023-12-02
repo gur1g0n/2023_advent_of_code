@@ -1,0 +1,4 @@
+/home/gabriel/.local/share/JetBrains/Toolbox/apps/clion/bin/cmake/linux/x64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/home/gabriel/.local/share/JetBrains/Toolbox/apps/clion/bin/ninja/linux/x64/ninja -DCMAKE_CXX_COMPILER=/bin/clang++-16 -G Ninja -S /home/gabriel/CLionProjects/2023_advent_of_code -B /home/gabriel/CLionProjects/2023_advent_of_code/cmake-build-debug
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/gabriel/CLionProjects/2023_advent_of_code/cmake-build-debug
