@@ -49,11 +49,6 @@ u_int64_t first_solution(const std::vector<std::string>& strings) {
 
     u_int64_t result = 0;
 
-    std::vector<int> copies;
-
-    copies.resize(strings.size(),1);
-
-
     for(const std::string& s:strings){
         auto nums = splitString(s.substr(9),"|");
         auto winning = stringToIntVector(nums[0]);
