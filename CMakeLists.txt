@@ -15,3 +15,5 @@ add_executable(AoC02 02.cpp ParserHelper.h)
 add_executable(AoC03 03.cpp ParserHelper.h)
 
 add_executable(AoC04 04.cpp ParserHelper.h)
+
+add_executable(AoC05 05.cpp ParserHelper.h)
