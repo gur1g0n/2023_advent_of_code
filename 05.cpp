@@ -28,17 +28,15 @@ struct Map{
     }
 
     std::vector<seed_range> map_to(std::vector<seed_range> ranges){
-
         std::vector<seed_range> output;
-        std::vector<seed_range> rest;
 
         while (!ranges.empty()){
-            auto s_range = ranges.back();
+            auto range = ranges.back();
             ranges.pop_back();
             bool mapped = false;
             for (auto map: conversion_maps) {
-                int64_t x1 = s_range.start;
-                int64_t x2 = s_range.end;
+                int64_t x1 = range.start;
+                int64_t x2 = range.end;
                 int64_t y1 = map.src_start;
                 int64_t y2 = map.src_start + map.length-1;
                 int64_t offset = map.dest_start - map.src_start;
@@ -52,7 +50,7 @@ struct Map{
                 }
             }
             if(not mapped)
-                output.push_back(s_range);
+                output.push_back(range);
 
         }
 
@@ -62,7 +60,7 @@ struct Map{
 
 
 
-int64_t second_solution(std::string s) {
+int64_t second_solution(const std::string& s) {
     std::vector<int64_t> nums = ParserHelper::parseIntsFromString(s.substr(7, s.find('\n')));
     std::vector<std::vector<seed_range>> seeds;
 
@@ -75,16 +73,15 @@ int64_t second_solution(std::string s) {
     std::vector<Map> maps;
     maps.resize(7);
 
-    auto block = ParserHelper::parseStrsFromString(s.substr(s.find("seed-to-soil")), "\n\n");
+    auto maps_strings = ParserHelper::parseStrsFromString(s.substr(s.find("seed-to-soil")), "\n\n");
 
-    for (std::size_t i = 0; i < block.size(); i++) {
-        auto map = ParserHelper::parseStrsFromString(block[i].substr(block[i].find('\n') + 1), "\n");
+    for (std::size_t i = 0; i < maps_strings.size(); i++) {
+        auto map = ParserHelper::parseStrsFromString(maps_strings[i].substr(maps_strings[i].find('\n') + 1), "\n");
         for (const auto& m: map) {
             auto map_num = ParserHelper::parseIntsFromString(m);
             maps.at(i).conversion_maps.push_back({map_num[0], map_num[1], map_num[2]});
         }
     }
-
 
     for (Map m: maps) {
         for (std::vector<seed_range>& seed: seeds) {
@@ -92,23 +89,22 @@ int64_t second_solution(std::string s) {
         }
     }
 
-    std::vector<seed_range> a = seeds | ranges::views::for_each([](std::vector<seed_range> n){return n;}) | ranges::to_<std::vector<seed_range>>;
-    return ranges::min(a | ranges::views::transform([](seed_range n){return n.start;}));
+    return ranges::min(seeds | ranges::views::join | ranges::views::transform([](seed_range n){return n.start;}));
 }
 
 
 
-int64_t first_solution(std::string s) {
+int64_t first_solution(const std::string& s) {
     std::vector<int64_t> seeds;
     seeds = ParserHelper::parseIntsFromString(s.substr(7, s.find('\n')));
 
     std::vector<Map> maps;
     maps.resize(7);
 
-    auto block = ParserHelper::parseStrsFromString(s.substr(s.find("seed-to-soil")), "\n\n");
+    auto maps_strings = ParserHelper::parseStrsFromString(s.substr(s.find("seed-to-soil")), "\n\n");
 
-    for (std::size_t i = 0; i < block.size(); i++) {
-        auto map = ParserHelper::parseStrsFromString(block[i].substr(block[i].find('\n') + 1), "\n");
+    for (std::size_t i = 0; i < maps_strings.size(); i++) {
+        auto map = ParserHelper::parseStrsFromString(maps_strings[i].substr(maps_strings[i].find('\n') + 1), "\n");
         for (const auto& m: map) {
             auto map_num = ParserHelper::parseIntsFromString(m);
             maps.at(i).conversion_maps.push_back({map_num[0], map_num[1], map_num[2]});
