@@ -6,7 +6,7 @@
 #include <range/v3/action.hpp>
 
 auto splitString(std::string_view sv, std::string_view sep) {
-    auto parts = std::views::split(sv, sep);
+    auto parts = ranges::views::split(sv, sep);
     auto partsVec = ranges::to<std::vector<std::string>>(parts);
     return partsVec;
 }
