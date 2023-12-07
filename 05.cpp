@@ -3,34 +3,33 @@
 #include <range/v3/algorithm.hpp>
 #include <range/v3/view.hpp>
 
-struct map_entry{
+struct map_entry {
     int64_t dest_start;
     int64_t src_start;
     int64_t length;
 };
 
-struct seed_range{
+struct seed_range {
     int64_t start;
     int64_t end;
-
 };
 
-struct Map{
+struct Map {
     std::vector<map_entry> conversion_maps;
 
-    int64_t map_to(int64_t num){
-        for(auto m:conversion_maps){
-            if (num>=m.src_start && num<(m.src_start + m.length)){
+    int64_t map_to(int64_t num) {
+        for (auto m: conversion_maps) {
+            if (num >= m.src_start && num < (m.src_start + m.length)) {
                 return m.dest_start + num - m.src_start;
             }
         }
         return num;
     }
 
-    std::vector<seed_range> map_to(std::vector<seed_range> ranges){
+    std::vector<seed_range> map_to(std::vector<seed_range> ranges) {
         std::vector<seed_range> output;
 
-        while (!ranges.empty()){
+        while (!ranges.empty()) {
             auto range = ranges.back();
             ranges.pop_back();
             bool mapped = false;
@@ -38,20 +37,19 @@ struct Map{
                 int64_t x1 = range.start;
                 int64_t x2 = range.end;
                 int64_t y1 = map.src_start;
-                int64_t y2 = map.src_start + map.length-1;
+                int64_t y2 = map.src_start + map.length - 1;
                 int64_t offset = map.dest_start - map.src_start;
-                if(x1 <= y2 && y1 <= x2){
+                if (x1 <= y2 && y1 <= x2) {
                     mapped = true;
-                    if(x1<y1)
-                        ranges.push_back({x1,y1-1});
-                    output.push_back({std::max(x1,y1)+offset,std::min(x2,y2)+offset});
-                    if(x2>y2)
-                        ranges.push_back({y2+1,x2});
+                    if (x1 < y1)
+                        ranges.push_back({x1, y1 - 1});
+                    output.push_back({std::max(x1, y1) + offset, std::min(x2, y2) + offset});
+                    if (x2 > y2)
+                        ranges.push_back({y2 + 1, x2});
                 }
             }
-            if(not mapped)
+            if (not mapped)
                 output.push_back(range);
-
         }
 
         return output;
@@ -59,14 +57,13 @@ struct Map{
 };
 
 
-
-int64_t second_solution(const std::string& s) {
+int64_t second_solution(const std::string &s) {
     std::vector<int64_t> nums = ParserHelper::parseIntsFromString(s.substr(7, s.find('\n')));
     std::vector<std::vector<seed_range>> seeds;
 
 
-    for(int i = 0;i<nums.size();i+=2){
-        std::vector<seed_range> v{{nums[i],nums[i]+nums[i+1]-1}};
+    for (int i = 0; i < nums.size(); i += 2) {
+        std::vector<seed_range> v{{nums[i], nums[i] + nums[i + 1] - 1}};
         seeds.push_back(v);
     }
 
@@ -77,24 +74,23 @@ int64_t second_solution(const std::string& s) {
 
     for (std::size_t i = 0; i < maps_strings.size(); i++) {
         auto map = ParserHelper::parseStrsFromString(maps_strings[i].substr(maps_strings[i].find('\n') + 1), "\n");
-        for (const auto& m: map) {
+        for (const auto &m: map) {
             auto map_num = ParserHelper::parseIntsFromString(m);
             maps.at(i).conversion_maps.push_back({map_num[0], map_num[1], map_num[2]});
         }
     }
 
     for (Map m: maps) {
-        for (std::vector<seed_range>& seed: seeds) {
+        for (std::vector<seed_range> &seed: seeds) {
             seed = m.map_to(seed);
         }
     }
 
-    return ranges::min(seeds | ranges::views::join | ranges::views::transform([](seed_range n){return n.start;}));
+    return ranges::min(seeds | ranges::views::join | ranges::views::transform([](seed_range n) { return n.start; }));
 }
 
 
-
-int64_t first_solution(const std::string& s) {
+int64_t first_solution(const std::string &s) {
     std::vector<int64_t> seeds;
     seeds = ParserHelper::parseIntsFromString(s.substr(7, s.find('\n')));
 
@@ -105,7 +101,7 @@ int64_t first_solution(const std::string& s) {
 
     for (std::size_t i = 0; i < maps_strings.size(); i++) {
         auto map = ParserHelper::parseStrsFromString(maps_strings[i].substr(maps_strings[i].find('\n') + 1), "\n");
-        for (const auto& m: map) {
+        for (const auto &m: map) {
             auto map_num = ParserHelper::parseIntsFromString(m);
             maps.at(i).conversion_maps.push_back({map_num[0], map_num[1], map_num[2]});
         }

@@ -15,8 +15,8 @@ std::vector<std::tuple<int, int>> getAdjacent(std::vector<std::vector<std::tuple
 
     std::vector<std::tuple<int, int>> v;
 
-    for (int dx = (i > 0 ? -1 : 0); dx <= (i < n -1 ? 1 : 0); ++dx) {
-        for (int dy = (j > 0 ? -1 : 0); dy <= (j < m -1 ? 1 : 0); ++dy) {
+    for (int dx = (i > 0 ? -1 : 0); dx <= (i < n - 1 ? 1 : 0); ++dx) {
+        for (int dy = (j > 0 ? -1 : 0); dy <= (j < m - 1 ? 1 : 0); ++dy) {
             if (dx != 0 || dy != 0) {
                 v.push_back(arr[i + dx][j + dy]);
             }
@@ -42,10 +42,10 @@ u_int64_t second_solution(const std::vector<std::string> &grid) {
     u_int64_t result = 0;
     for (std::size_t row = 0; row < n_rows; row++) {
         for (std::size_t col = 0; col < n_columns; col++) {
-            if ( isdigit(grid.at(row).at(col))) {
+            if (isdigit(grid.at(row).at(col))) {
                 std::size_t length = 0;
                 int num = std::stoi(grid.at(row).substr(col), &length);
-                for(std::size_t i = 0;i<length;i++){
+                for (std::size_t i = 0; i < length; i++) {
                     numbers.at(row).at(col + i) = {num, id};
                 }
                 id++;
@@ -58,15 +58,10 @@ u_int64_t second_solution(const std::vector<std::string> &grid) {
         for (std::size_t col = 0; col < n_columns; col++) {
             if (grid.at(row).at(col) == '*') {
                 std::vector<std::tuple<int, int>> adj = getAdjacent(numbers, row, col);
-                auto unique_gears = adj
-                                    |ranges::views::filter([](std::tuple<int,int>t){return get<1>(t)!=0;})
-                                    |ranges::views::unique([](std::tuple<int, int> t, std::tuple<int, int> s) { return get<1>(t) == get<1>(s); });
-                if(ranges::distance(unique_gears) == 2) {
-                    result+= ranges::fold_left(
-                                unique_gears
-                                    | ranges::views::transform([](std::tuple<int, int> t) { return get<0>(t); })
-                            , 1
-                            , std::multiplies{});
+                auto unique_gears = adj | ranges::views::filter([](std::tuple<int, int> t) { return get<1>(t) != 0; }) | ranges::views::unique([](std::tuple<int, int> t, std::tuple<int, int> s) { return get<1>(t) == get<1>(s); });
+                if (ranges::distance(unique_gears) == 2) {
+                    result += ranges::fold_left(
+                            unique_gears | ranges::views::transform([](std::tuple<int, int> t) { return get<0>(t); }), 1, std::multiplies{});
                 }
             }
         }
@@ -85,7 +80,7 @@ u_int64_t first_solution(const std::vector<std::string> &grid) {
     u_int64_t result = 0;
     for (std::size_t row = 0; row < n_rows; row++) {
         for (std::size_t col = 0; col < n_columns; col++) {
-            if ( isdigit(grid.at(row).at(col))) {
+            if (isdigit(grid.at(row).at(col))) {
                 std::size_t length = 0;
                 int num = std::stoi(grid.at(row).substr(col), &length);
                 bool valid = false;
@@ -102,7 +97,6 @@ u_int64_t first_solution(const std::vector<std::string> &grid) {
                 col += length;
             }
         }
-
     }
     return result;
 }

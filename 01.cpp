@@ -29,7 +29,7 @@ u_int64_t findNum(std::string s, bool reverse) {
     return minNum;
 }
 
-u_int64_t second_solution(const std::vector<std::string>& strings) {
+u_int64_t second_solution(const std::vector<std::string> &strings) {
     u_int64_t result = 0;
     for (const std::string &s: strings) {
         result += findNum(s, false) * 10 + findNum(s, true);
