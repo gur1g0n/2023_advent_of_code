@@ -11,49 +11,49 @@ enum Hand_Type {HC,OP,TP,ThreeOK,FH,FourOK,FiveOK};
 
 class Hand {
     [[nodiscard]] Hand_Type get_hand_type() const{
-        std::map<char, int> myMap;
+        std::map<char, int> count;
         for (const auto &value : cards) {
-            myMap[value]++;
+            count[value]++;
         }
 
         std::size_t j = 0;
-        if (auto it = myMap.find(JOKER);it != myMap.end()) {
+        if (auto it = count.find(JOKER);it != count.end()) {
             j=it->second;
         }
 
         if(j>0){
-            myMap.erase(JOKER);
+            count.erase(JOKER);
 
-            std::vector<std::pair<char, int>> myVector(myMap.begin(), myMap.end());
+            std::vector<std::pair<char, int>> count_vec(count.begin(), count.end());
 
-            if (myVector.size() == 1 || myVector.empty())
+            if (count_vec.size() == 1 || count_vec.empty())
                 return FiveOK;
-            for(auto [c,i]:myVector){
+            for(auto [c,i]: count_vec){
                 if(j+i==4||j==4)
                     return FourOK;
             }
-            if (j==1&&myVector.size()==2&&(myVector[0].second == 2 && myVector[1].second == 2))
+            if (j==1&& count_vec.size()==2&&(count_vec[0].second == 2 && count_vec[1].second == 2))
                 return FH;
-            for(auto [c,i]:myVector){
+            for(auto [c,i]: count_vec){
                 if(j+i==3||j==3)
                     return ThreeOK;
             }
             return OP;
         }else {
 
-            std::vector<std::pair<char, int>> myVector(myMap.begin(), myMap.end());
+            std::vector<std::pair<char, int>> count_vec(count.begin(), count.end());
 
-            if (myVector.size() == 1)
+            if (count_vec.size() == 1)
                 return FiveOK;
-            if (myVector.size() == 2 && (myVector[0].second == 4 || myVector[1].second == 4))
+            if (count_vec.size() == 2 && (count_vec[0].second == 4 || count_vec[1].second == 4))
                 return FourOK;
-            if (myVector.size() == 2 && ((myVector[0].second == 3 && myVector[1].second == 2) || (myVector[0].second == 2 && myVector[1].second == 3)))
+            if (count_vec.size() == 2 && ((count_vec[0].second == 3 && count_vec[1].second == 2) || (count_vec[0].second == 2 && count_vec[1].second == 3)))
                 return FH;
-            if (myVector.size() == 3 && (myVector[0].second == 3 || myVector[1].second == 3 || myVector[2].second == 3))
+            if (count_vec.size() == 3 && (count_vec[0].second == 3 || count_vec[1].second == 3 || count_vec[2].second == 3))
                 return ThreeOK;
-            if (myVector.size() == 3)
+            if (count_vec.size() == 3)
                 return TP;
-            if (myVector.size() == 4)
+            if (count_vec.size() == 4)
                 return OP;
         }
         return HC;
@@ -71,9 +71,8 @@ public:
 
         if(a==b){
             for(std::size_t i = 0;i<cards.size();i++){
-                if(cards[i]==other.cards[i]){
+                if(cards[i]==other.cards[i])
                     continue;
-                }
                 return cards[i]<other.cards[i];
             }
             //They are equal
