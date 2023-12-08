@@ -37,3 +37,4 @@ add_executable(AoC05 05.cpp ParserHelper.h)
 add_executable(AoC06 06.cpp ParserHelper.h)
 
 add_executable(AoC07 07.cpp ParserHelper.h)
+add_executable(A0C08 08.cpp ParserHelper.h)
